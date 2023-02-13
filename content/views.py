@@ -4,7 +4,7 @@ from .models import Feed # 나와 같은 소스 폴더에 있는 models파일에
 
 class Main(APIView):
     def get(self, request):
-        feed_list = Feed.objects.all() 
+        feed_list = Feed.objects.all().order_by("-id") 
         #쿼리셋 = Feed 안에 있는 모든 데이터를 가져오겠다.
         # select * from content_feed랑 똑같음
         #print(feed_list)

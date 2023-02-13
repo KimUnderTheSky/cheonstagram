@@ -160,13 +160,6 @@
 </style>
 
 <body>
-<div>
-  {% for feed in feeds %}
-    <p> {{ feed.content }} </p>
-    <p> {{ feed.user_id }} </p>
-    <p> {{ feed.like_count }} </p>
-  {% endfor %}
-</div>
 <!-- 상단 내비게이션 바 -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom" style="width: 100%;height: 50px;position: fixed;" >
   <div class="container">
@@ -186,14 +179,15 @@
 <!-- 바디 영역 -->
 <div class="main_body">
   <div class="left_body">
+    {% for feed in feeds %}
     <div class="border feed_box">
       <div class="feed_name">
         <div class="profile_box">
-          <img class="profile_img" src="https://img.danawa.com/prod_img/500000/147/615/img/14615147_1.jpg?shrink=330:330&_v=20220426173016">
+          <img class="profile_img" src="{{ feed.profile_image}}">
         </div>
-        <span class="feed_name_txt"> cheonha </span>
+        <span class="feed_name_txt"> {{ feed.user_id }} </span>
       </div>
-      <img class="feed_img" src="https://mblogthumb-phinf.pstatic.net/MjAxNzA2MTFfMjc1/MDAxNDk3MTcyMDgyNzEw.ID5RyHWKvsVEW2NS9EQGyRYX7vUaXr7znQeuTrRRmdIg.gK7MD7VhNJPkV4_dueiWer2y-oH7NAAmEklF-6bbYyQg.JPEG.jejubyeol/%EC%97%AC%EB%A6%84%EC%97%90_%EC%A0%9C%EC%A3%BC%EB%8F%84_%EC%82%AC%EC%A7%84%EC%B0%8D%EA%B8%B0_%EC%A2%8B%EC%9D%80%EA%B3%B3.jpg?type=w800">
+      <img class="feed_img" src="{{ feed.image }}">
 
       <div class="feed_icon">
         <div>
@@ -214,16 +208,17 @@
         </div>
       </div>
       <div class="feed_like">
-        <p class="feed_txt"> <b>좋아요 10개</b></p>
+        <p class="feed_txt"> <b> {{ feed.like_count}} 명</b>이 좋아합니다.</p>
       </div>
       <div class="feed_content">
-        <p class="feed_txt"> <b> cheonha </b> 코로나라서 해외여행을 못가니 최근 제주도 가는사람이 늘고있습니다~ 제주도도 조심해야되는건 마찬가지~!</p>
+        <p class="feed_txt"> <b> {{ feed.user_id }} </b> {{ feed.content }} </p>
       </div>
       <div class="feed_reply">
         <span class="feed_txt"> <b> mychew </b> 제주도 가고 싶어요 ㅠㅠ</span>
         <span class="feed_txt"> <b> cho </b> 제주도  ㄱ ㄱ </span>
       </div>
     </div>
+  {% endfor %}
   </div>
   <div class="right_body">
     <div class="feed_name" style="justify-content: space-between">
