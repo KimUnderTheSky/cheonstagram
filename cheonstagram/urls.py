@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .views import Sub
+from content.views import Main # content폴더 views파일의 Main class 가져오기
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Sub.as_view()),
+    path('main/', Main.as_view()),
 ]
