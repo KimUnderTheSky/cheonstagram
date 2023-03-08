@@ -13,6 +13,8 @@
   <link
     href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
     rel="stylesheet">
+  <!-- 요기에 제이쿼리 링크-->
+  <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 
   <title>천스타그램 </title>
 </head>
@@ -157,6 +159,32 @@
     flex-direction: column;
 }
 
+.modal_overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
+}
+
+.modal_window {
+  background: white;
+  backdrop-filter: blur(13.5px);
+  -webkit-backdrop-filter: blur(13.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 800px;
+  height: 600px;
+  position: relative;
+  padding: 10px;
+} 
 </style>
 
 <body>
@@ -169,7 +197,7 @@
     <div>
       <span class="material-icons">home</span>
       <span class="material-icons">send</span>
-      <span class="material-icons-outlined">add_box</span>
+      <span id = "nav_bar_add_box" class="material-icons-outlined">add_box</span>
       <span class="material-icons-outlined">explore</span>
       <span class="material-icons-outlined">favorite_border</span>
     </div>
@@ -318,11 +346,139 @@
     </div>
   </div>
 </div>
+<!-- 첫번째 모달 -->
 
+<div id="first_modal", class="modal_overlay">
+  <div class="modal_window">
+    <div style="border-bottom: solid 1px gray; display:flex; flex-direction: row; justify-content: space-between">
+      <div style = "width: 40px;"></div>
+      <div>새 이미지 업로드</div>
+      <div style = "width: 40px;">
+        <span class="material-icons-outlined close_modal">close</span>
+      </div>
+    </div>
+    <div class="img_upload_space" style="border-top: solid 1px gray; width: 778px; height: 540px; margin-top: 10px"></div> 
+  </div>
+   
+</div>
 
+<!-- 두번째 모달 -->
+<div id="second_modal", class="modal_overlay">
+  <div class="modal_window">
+    <div style="display:flex; flex-direction: row; justify-content: space-between">
+      <div style = "width: 40px;"></div>
+      <div>새 이미지 업로드</div>
+      <div style = "width: 40px;">
+        <span class="material-icons-outlined close_modal">close</span>
+      </div>
+    </div>
+    
+    <div style="border-top: solid 1px gray; display: flex; flex-direction: row;">
+      <div class="img_upload_space" style="width: 500px; height: 540px; margin-top: 10px"></div>
+      <div>글 입력하는 곳</div>
+    </div>
+
+    
+    
+  </div>
+</div>
 
 <!-- Optional JavaScript; choose one of the two! -->
+<!-- jquery-->
+<script>
+  $('#nav_bar_add_box').click(function(){
+    $('#first_modal').css({
+      display: 'flex',
+      position: 'fixed',
+      top: '0',
+      bottom: '0',
+      left: '0',
+      right: '0',
+      margin: 'auto'
+      
+    });
+    $(document.body).css({
+      overflowY : 'hidden'
+    })
+  })
+  $('.close_modal').click(function(){
+    $('.modal_overlay').css({
+      display: 'none',
+    });
+    $(document.body).css({
+      overflowY : 'scroll'
+    });
+    $('.img_upload_space').css({
+      "background": "orange"
+    });
+  })
 
+  $('.img_upload_space')
+  .on("dragover", dragOver)
+  .on("dragleave", dragOver)
+  .on("drop", uploadFiles);
+
+  function dragOver(e){
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.type == "dragover") {
+      $(e.target).css({
+          "background-color": "black",
+          "outline-offset": "-20px"
+      });
+  } else {
+      $(e.target).css({
+          "background-color": "orange",
+          "outline-offset": "-10px"
+      });
+  }
+  }
+  
+  function uploadFiles(e){
+    e.stopPropagation();
+    e.preventDefault();
+    dragOver(e); //1
+ 
+    e.dataTransfer = e.originalEvent.dataTransfer; //2
+    console.log("e is ", e);
+    var files = e.target.files || e.dataTransfer.files;
+    console.log("파일은 :", files)
+    if (files.length > 1) {
+        alert('하나만 올려라.');
+        return;
+    } 
+
+    if (files[0].type.match(/image.*/)) {
+      $('#first_modal').css({
+        display: "none",
+      });
+
+      $('#second_modal').css({
+        display: 'flex',
+        position: 'fixed',
+        top: '0',
+        bottom: '0',
+        left: '0',
+        right: '0',
+        margin: 'auto'
+        
+      });
+      
+      $('.img_upload_space').css({
+          "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+          "outline": "none",
+          "background-size": "100%",
+          "background-repeat": "no-repeat%",
+          "background-position": "center"
+
+      });
+    }else{
+      alert('이미지가 아닙니다.');
+      return;
+    }
+  
+  }
+</script>
 <!-- Option 1: Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
@@ -333,6 +489,5 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
 -->
-
 </body>
 </html>
