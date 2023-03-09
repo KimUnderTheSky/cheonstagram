@@ -350,7 +350,7 @@
 
 <div id="first_modal", class="modal_overlay">
   <div class="modal_window">
-    <div style="border-bottom: solid 1px gray; display:flex; flex-direction: row; justify-content: space-between">
+    <div style="display:flex; flex-direction: row; justify-content: space-between">
       <div style = "width: 40px;"></div>
       <div>새 이미지 업로드</div>
       <div style = "width: 40px;">
@@ -375,17 +375,23 @@
     
     <div style="border-top: solid 1px gray; display: flex; flex-direction: row;">
       <div class="img_upload_space" style="width: 500px; height: 540px; margin-top: 10px"></div>
-      <div>글 입력하는 곳</div>
+      <div style="border-left: solid 1px gray">
+        <div>
+          <textarea id = "input_feed_content" style = "width: 276px; height: 510px" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+        </div>
+        <button id="feed_create_button" type="button" class="btn btn-primary" style="width: 100%">
+          공유하기
+        </button>
+      </div>
+      
     </div>
-
-    
-    
   </div>
 </div>
 
 <!-- Optional JavaScript; choose one of the two! -->
 <!-- jquery-->
 <script>
+  let files; //files변수를 전역변수로 선언
   $('#nav_bar_add_box').click(function(){
     $('#first_modal').css({
       display: 'flex',
@@ -409,9 +415,50 @@
       overflowY : 'scroll'
     });
     $('.img_upload_space').css({
-      "background": "orange"
+      "background": "white"
     });
   })
+
+
+  $('#feed_create_button').click(function() {
+    alert("공유하기 눌렀다."+ files[0].name);
+    let file = files;
+    let image = files[0].name;
+    let content = $('#input_feed_content').val();
+    let user_id = "cheonha";
+    let profile_image = "https://img.danawa.com/prod_img/500000/147/615/img/14615147_1.jpg?shrink=330:330&_v=20220426173016";
+    
+    let fd = new FormData();
+
+    fd.append('file', file);
+    fd.append('image', image);
+    fd.append('content', content);
+    fd.append('user_id', user_id);
+    fd.append('profile_image', profile_image);
+
+    $.ajax({
+      url: "/content/upload", // 어떤 url을 호출할건지.
+      data: fd, //넘기는 데이터는 FormData, 
+      // RestFul형태의 API에서 그냥 데이터만 넘길때는 json형태로 왔다갔다
+      // 파일업로드는 formdata형태로 데이터를 가져와야함
+      method: "POST", //get호출방법, post로 호출방법 restapi에서는 put delete도 있지만 여기서는 POST만 사용
+      processData: false,
+      contentType: false,
+
+      //callback함수: 뭔가 액션이 일어나서 그 결과로 실행된 함수를 callback함수라고 한다.
+      // 직접 실행하지 않아도 뭔가 액션이 일어나서 그 결과로 실행된 함수를 우리가 callback함수라고 한다.
+      // url로 data로 post호출하게 되면 함수 실행
+      success: function(data){
+        console.log("성공");
+      },
+      error: function(request, status, error){
+        console.log("에러");
+      },
+      complete: function(){
+        console.log("완료");
+      },
+    })
+  });
 
   $('.img_upload_space')
   .on("dragover", dragOver)
@@ -428,7 +475,7 @@
       });
   } else {
       $(e.target).css({
-          "background-color": "orange",
+          "background-color": "white",
           "outline-offset": "-10px"
       });
   }
@@ -441,7 +488,7 @@
  
     e.dataTransfer = e.originalEvent.dataTransfer; //2
     console.log("e is ", e);
-    var files = e.target.files || e.dataTransfer.files;
+    files = e.target.files || e.dataTransfer.files; //실제 파일값이 files 변수에 할당
     console.log("파일은 :", files)
     if (files.length > 1) {
         alert('하나만 올려라.');
