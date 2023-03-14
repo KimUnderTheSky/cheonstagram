@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from .views import Sub
 from content.views import Main, UploadFeed # content폴더 views파일의 Main class 가져오기
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,3 +26,6 @@ urlpatterns = [
     path('content/upload', UploadFeed.as_view()),
     # content/upload로 호출하면 content.views에 있는 UploadFeed함수가 실행됨
 ]
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
