@@ -14,17 +14,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from .views import Sub
 from content.views import Main, UploadFeed # content폴더 views파일의 Main class 가져오기
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('main/', Main.as_view()),
-    path('content/upload', UploadFeed.as_view()),
+    #path('content/upload', UploadFeed.as_view()),
     # content/upload로 호출하면 content.views에 있는 UploadFeed함수가 실행됨
+    path('content/', include('content.urls')), 
+    # include를 통해 다른 앱에 있는 urls를 불러올 수 있다.
+    # 앱에 있는 urls를 연결할때는 앞에 content/처럼 폴더명을 넣어줘야한다. 그럼 그 안에 있는 urls사용가능.
+    path('user/', include('user.urls')),
 ]
 
 
