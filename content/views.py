@@ -5,6 +5,7 @@ from .models import Feed # 나와 같은 소스 폴더에 있는 models파일에
 from uuid import uuid4
 import os
 from cheonstagram.settings import MEDIA_ROOT
+from user.models import User
 
 class Main(APIView):
     def get(self, request):
@@ -12,11 +13,19 @@ class Main(APIView):
         #쿼리셋 = Feed 안에 있는 모든 데이터를 가져오겠다.
         # select * from content_feed랑 똑같음
         #print(feed_list)
-        
-        for feed in feed_list:
-            print(feed.content)
 
-        return render(request, "cheonstagram/main.html",context=dict(feeds=feed_list))
+        email = request.session.get('email', None)
+        
+        if email is None:
+            return render(request, "user/login.html")
+
+        user = User.objects.filter(email = email).first()
+
+        if user is None:
+            return render(request, "user/login.html")
+        
+        
+        return render(request, "cheonstagram/main.html",context=dict(feeds=feed_list, user=user))
     
 class UploadFeed(APIView): # UploadFeed가 cheonstagram의 url이랑 매핑이돼야함
     def post(self, request):

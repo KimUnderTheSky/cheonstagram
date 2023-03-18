@@ -7,8 +7,10 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-    <title>Hello, world!</title>
+    
+    <!-- Jquery -->
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <title>회원 가입</title>
   </head>
   <body style="background: #FAFAFA">
     <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
@@ -17,29 +19,29 @@
         <div style="font-weight: bold; color: gray; padding-bottom: 20px">친구들의 사진과 동영상을 보려면 가입하세요</div>
         <div>
           <div class="form-floating mb-3">
-            <input type="email" class="form-control" style="font-size: 14px; height: 50px" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput" style="font-size: 14px; padding: 4px 10px; top: 10px">이메일 주소</label>
+            <input type="email" class="form-control" style="font-size: 14px; height: 50px" id="input_email" placeholder="email@example.com">
+            <label for="input_email" style="font-size: 14px; padding: 4px 10px; top: 10px">이메일 주소</label>
           </div>
         </div>
         <div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" style="font-size: 14px; height: 50px" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput" style="font-size: 14px; padding: 4px 10px; top: 10px">이름</label>
+            <input type="text" class="form-control" style="font-size: 14px; height: 50px" id="input_name" placeholder="Name">
+            <label for="input_name" style="font-size: 14px; padding: 4px 10px; top: 10px">이름</label>
           </div>
         </div>
         <div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" style="font-size: 14px; height: 50px" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput" style="font-size: 14px; padding: 4px 10px; top: 10px">닉네임</label>
+            <input type="text" class="form-control" style="font-size: 14px; height: 50px" id="input_nickname" placeholder="Nickname">
+            <label for="input_nickname" style="font-size: 14px; padding: 4px 10px; top: 10px">닉네임</label>
           </div>
         </div>
         <div>
           <div class="form-floating">
-            <input type="password" class="form-control" style="font-size: 14px; height: 50px" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword" style="font-size: 14px; padding: 4px 10px; top: 10px">패스워드</label>
+            <input type="password" class="form-control" style="font-size: 14px; height: 50px" id="input_password" placeholder="Password">
+            <label for="input_password" style="font-size: 14px; padding: 4px 10px; top: 10px">패스워드</label>
           </div>
         </div>
-        <button class="btn btn-primary" style="width: 100%; margin-top:10px"> 가입 </button>
+        <button id = "join_button" class="btn btn-primary" style="width: 100%; margin-top:10px"> 가입 </button>
       </div>
       <div style="padding: 20px; text-align: center; border: solid 1px rgba(219, 219, 219, 0); width: 300px; height: 70px; margin-top: 30px; background: white">
         <div>계정이 있으신가요? <a href="login">로그인</a></div>    
@@ -49,7 +51,45 @@
     
     
     <!-- Optional JavaScript; choose one of the two! -->
-
+    <script>
+      $('#join_button').click(function() {
+        
+        let email = $('#input_email').val();
+        let password = $('#input_password').val();
+        let nickname = $('#input_nickname').val();
+        let name = $('#input_name').val();
+        
+        console.log(email, password, nickname, name);
+    
+        $.ajax({
+          url: "/user/join", // 어떤 url을 호출할건지.
+          data: {
+            email : email,
+            password : password,
+            nickname : nickname,
+            name : name,
+          }, //넘기는 데이터는 JSON, 
+          // RestFul형태의 API에서 그냥 데이터만 넘길때는 json형태로 왔다갔다
+          method: "POST", //get호출방법, post로 호출방법 restapi에서는 put delete도 있지만 여기서는 POST만 사용
+    
+          //callback함수: 뭔가 액션이 일어나서 그 결과로 실행된 함수를 callback함수라고 한다.
+          // 직접 실행하지 않아도 뭔가 액션이 일어나서 그 결과로 실행된 함수를 우리가 callback함수라고 한다.
+          // url로 data로 post호출하게 되면 함수 실행
+          success: function(data){
+            console.log("성공");
+            alert("회원가입에 성공했습니다. 로그인해주세요");
+            location.replace('/user/login');
+          },
+          error: function(request, status, error){
+            console.log("에러");
+          },
+          complete: function(){
+            console.log("완료");
+            //location.replace("/main") //메인페이지로 다시가기
+          },
+        })
+      });
+    </script>
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
