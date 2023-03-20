@@ -208,7 +208,7 @@
         </a>
       
         <ul class="dropdown-menu" style="left: -153px;" aria-labelledby="dropdownMenuLink">
-          <li><a class="dropdown-item" href="/content/profile">프로필</a></li>
+          <li><a class="dropdown-item" href="#">프로필</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="/user/logout">로그아웃</a></li>
           </ul>
@@ -216,148 +216,31 @@
   </div>
 </nav>
 
-<!-- 바디 영역 -->
-<div class="main_body">
-  <div class="left_body">
-    {% for feed in feeds %}
-    <div class="border feed_box">
-      <div class="feed_name">
-        <div class="profile_box">
-          <img class="profile_img" src="{{ feed.profile_image}}">
+<!-- 프로필 영역-->
+<div style="display: flex; flex-direction: row; text-align: center; justify-content: center; padding-top: 60px;">
+    <div style = "padding: 20px 60px">
+        <div class="profile_box" style = "width: 175px; height: 175px;">
+            <img class="profile_img"
+                 src="{% get_media_prefix %}{{ user.profile_image }}">
         </div>
-        <span class="feed_name_txt"> {{ feed.user_id }} </span>
-      </div>
-      <!-- 파일이미지 id만 들어가면 이미지가 안나옴 http이런거 들어가야함.-->
-      <img class="feed_img" src="{% get_media_prefix %}{{ feed.image }}">
-
-      <div class="feed_icon">
-        <div>
-          <span class="material-icons-outlined">
-            favorite_border
-          </span>
-          <span class="material-icons-outlined">
-            mode_comment
-          </span>
-          <span class="material-icons-outlined">
-            send
-          </span>
+    </div>
+    <div style= "text-align: left">
+        <div style="display: flex; flex-direction: row; margin: 20px 0">
+            <div style="font-size: 26px; margin-right: 40px">
+                {{ user.nickname}}
+            </div>
+            <button id = "button_profile_upload" style="margin-right: 40px"> 프로필 사진 편집 </button>
+            <input type="file" id="input_fileupload" style="display:none;" onchange="profile_upload()"/>
+            <span class="material-icons-outlined" style="padding-right: 40px">settings</span>
+        </div>
+        
+        <div style="margin-bottom: 20px">
+            게시물 내 게시물 건수 팔로워 111 팔로잉 111
         </div>
         <div>
-          <span class="material-icons-outlined">
-            turned_in_not
-          </span>
+            <b>{{ user.name}}</b>
         </div>
-      </div>
-      <div class="feed_like">
-        <p class="feed_txt"> <b> {{ feed.like_count}} 명</b>이 좋아합니다.</p>
-      </div>
-      <div class="feed_content">
-        <p class="feed_txt"> <b> {{ feed.user_id }} </b> {{ feed.content }} </p>
-      </div>
-      <div class="feed_reply">
-        <span class="feed_txt"> <b> mychew </b> 제주도 가고 싶어요 ㅠㅠ</span>
-        <span class="feed_txt"> <b> cho </b> 제주도  ㄱ ㄱ </span>
-      </div>
     </div>
-  {% endfor %}
-  </div>
-  <div class="right_body">
-    <div class="feed_name" style="justify-content: space-between">
-      <div style="display: flex; align-items: center; ">
-        <div class="big_profile_box">
-          <img class="profile_img"
-               src="{% get_media_prefix %}{{ user.profile_image }}">
-        </div>
-        <div class="name_content">
-          <span class="feed_name_txt">{{user.nickname}} </span>
-          <span class="name_content_txt">{{user.name}}</span>
-        </div>
-      </div>
-
-      <a class="link_txt" >
-        전환
-      </a>
-    </div>
-
-    <div class="recommend_box">
-      <span style="color: gray"> 회원님을 위한 추천</span>
-      <span style="font-size: 12px"> 모두 보기 </span>
-    </div>
-    <div>
-      <div class="feed_name" style="justify-content: space-between">
-        <div class="profile_box">
-          <img class="profile_img"
-               src="https://i.pinimg.com/736x/93/a6/8b/93a68b57a54e4bdc73d43d1d049b94b3.jpg">
-        </div>
-        <div class="name_content">
-          <span class="feed_name_txt"> asdf </span>
-          <span class="name_content_txt"> Jinstargram 신규가입</span>
-        </div>
-        <a class="link_txt">
-          팔로우
-        </a>
-      </div>
-      <div class="feed_name" style="justify-content: space-between">
-        <div class="profile_box">
-          <img class="profile_img"
-               src="http://file3.instiz.net/data/cached_img/upload/2021/01/27/18/2ce2f41f7e9f09c0acc77faac7452dbf.jpg">
-        </div>
-        <div class="name_content">
-          <span class="feed_name_txt"> bcdfe </span>
-          <span class="name_content_txt"> cheonha 외 5명이 팔로우</span>
-        </div>
-        <a class="link_txt">
-          팔로우
-        </a>
-      </div>
-      <div class="feed_name" style="justify-content: space-between">
-        <div class="profile_box">
-          <img class="profile_img"
-               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTiCVWdogd6Ocsm08kL8ph4sb1MN0AYEiSUQ&usqp=CAU">
-        </div>
-        <div class="name_content">
-          <span class="feed_name_txt"> asdkcj </span>
-          <span class="name_content_txt"> cheonha 외 5명이 팔로우</span>
-        </div>
-        <a class="link_txt">
-          팔로우
-        </a>
-      </div>
-      <div class="feed_name" style="justify-content: space-between">
-        <div class="profile_box">
-          <img class="profile_img"
-               src="https://pbs.twimg.com/media/EhzH0_DU4AEZ9yr.jpg">
-        </div>
-        <div class="name_content">
-          <span class="feed_name_txt"> 123456789 </span>
-          <span class="name_content_txt"> 그냥 추천해봄 </span>
-        </div>
-        <a class="link_txt">
-          팔로우
-        </a>
-      </div>
-      <div class="feed_name" style="justify-content: space-between">
-        <div class="profile_box">
-          <img class="profile_img"
-               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHPNYM5RQgA2F7BtpBQ-OrNFKDXVDUpypRuw&usqp=CAU">
-        </div>
-        <div class="name_content">
-          <span class="feed_name_txt"> zzzzz </span>
-          <span class="name_content_txt"> 추천 </span>
-        </div>
-        <a class="link_txt">
-          팔로우
-        </a>
-      </div>
-    </div>
-    <div class="comment_box">
-      <span> 인스타그램인척 </span>
-      <span> https://cheonhacheonha.com </span>
-      <br>
-      <span> @2023 cheonha </span>
-
-    </div>
-  </div>
 </div>
 <!-- 첫번째 모달 -->
 
@@ -371,8 +254,7 @@
       </div>
     </div>
     <div class="img_upload_space" style="border-top: solid 1px gray; width: 778px; height: 540px; margin-top: 10px"></div> 
-  </div>
-   
+  </div>   
 </div>
 
 <!-- 두번째 모달 -->
@@ -538,6 +420,44 @@
       return;
     }
   
+  }
+
+  $('#button_profile_upload').click(function(){
+    $('#input_fileupload').click();
+  });
+
+  function profile_upload(){
+    let file = $('#input_fileupload')[0].files[0]
+    let email = "{{user.email}}"
+    console.log(file);
+    let fd = new FormData();
+
+    fd.append('file', file);
+    fd.append('email', email);
+    
+    $.ajax({
+      url: "/user/profile/upload", // 어떤 url을 호출할건지. 앞에 "/"를 하면 루트에서부터 user/profile/upload로 주소 입력가능
+      data: fd, //넘기는 데이터는 FormData, 
+      // RestFul형태의 API에서 그냥 데이터만 넘길때는 json형태로 왔다갔다
+      // 파일업로드는 formdata형태로 데이터를 가져와야함
+      method: "POST", //get호출방법, post로 호출방법 restapi에서는 put delete도 있지만 여기서는 POST만 사용
+      processData: false,
+      contentType: false,
+
+      //callback함수: 뭔가 액션이 일어나서 그 결과로 실행된 함수를 callback함수라고 한다.
+      // 직접 실행하지 않아도 뭔가 액션이 일어나서 그 결과로 실행된 함수를 우리가 callback함수라고 한다.
+      // url로 data로 post호출하게 되면 함수 실행
+      success: function(data){
+        console.log("성공");
+      },
+      error: function(request, status, error){
+        console.log("에러");
+      },
+      complete: function(){
+        console.log("완료");
+        location.replace("/content/profile") //메인페이지로 다시가기
+      },
+    })
   }
 </script>
 <!-- Option 1: Bootstrap Bundle with Popper -->

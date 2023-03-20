@@ -52,3 +52,17 @@ class UploadFeed(APIView): # UploadFeed가 cheonstagram의 url이랑 매핑이�
         return Response(status = 200) 
         #response는 restFramework함수를 이미 만들어놓음 http 응답 코드 200은 성공을 뜻함
         
+class Profile(APIView):
+    def get(self, request):
+        email = request.session.get('email', None)
+        
+        if email is None:
+            return render(request, "user/login.html")
+
+        user = User.objects.filter(email = email).first()
+
+        if user is None:
+            return render(request, "user/login.html")
+        
+        return render(request, "content/profile.html", context=dict(user=user))
+    
