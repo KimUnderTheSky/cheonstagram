@@ -320,16 +320,14 @@
     let file = files[0];
     let image = files[0].name;
     let content = $('#input_feed_content').val();
-    let user_id = "cheonha";
-    let profile_image = "https://img.danawa.com/prod_img/500000/147/615/img/14615147_1.jpg?shrink=330:330&_v=20220426173016";
+    let user_id = "{{ user.nickname }}";
+    let profile_image = "{{ user.profile_image }}";
     
     let fd = new FormData();
 
     fd.append('file', file);
     fd.append('image', image);
     fd.append('content', content);
-    fd.append('user_id', user_id);
-    fd.append('profile_image', profile_image);
 
     $.ajax({
       url: "/content/upload", // 어떤 url을 호출할건지.
