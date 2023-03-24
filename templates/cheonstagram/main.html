@@ -232,13 +232,15 @@
 
       <div class="feed_icon">
         <div>
-          <span class="material-icons-outlined">
-            favorite_border
-          </span>
+          <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}" class="favorite material-icons-outlined" style="color: red; cursor:pointer">{% if feed.is_liked %}favorite{% else %}favorite_border{% endif %}</span>
         </div>
         <div>
-          <span class="material-icons-outlined">
-            turned_in_not
+          <span id="bookmark_{{ feed.id }}" feed_id="{{ feed.id }}" class="bookmark material-icons-outlined">
+            {% if feed.is_marked %}
+            bookmark
+            {% else %}
+            bookmark_border
+            {% endif %}
           </span>
         </div>
       </div>
@@ -411,6 +413,81 @@
 <!-- jquery-->
 <script>
   let files; //files변수를 전역변수로 선언
+  $(".bookmark").click(function(e){ 
+    let feed_id = e.target.attributes.getNamedItem('feed_id').value;
+    let bookmark_id = e.target.id;
+    console.log(bookmark_id);
+    let bookmark_text = $.trim($('#'+bookmark_id).html());
+    console.log(bookmark_text);     
+    if(bookmark_text == 'bookmark'){
+      $('#'+bookmark_id).html('bookmark_border');
+    }
+    else{
+      $('#'+bookmark_id).html('bookmark');
+    }
+
+    $.ajax({
+      url: "/content/bookmark", // 어떤 url을 호출할건지.
+      data: {
+        feed_id : feed_id,
+        bookmark_text : bookmark_text,
+      }, //넘기는 데이터는 JSON, 
+      // RestFul형태의 API에서 그냥 데이터만 넘길때는 json형태로 왔다갔다
+      method: "POST", //get호출방법, post로 호출방법 restapi에서는 put delete도 있지만 여기서는 POST만 사용
+
+      //callback함수: 뭔가 액션이 일어나서 그 결과로 실행된 함수를 callback함수라고 한다.
+      // 직접 실행하지 않아도 뭔가 액션이 일어나서 그 결과로 실행된 함수를 우리가 callback함수라고 한다.
+      // url로 data로 post호출하게 되면 함수 실행
+      success: function(data){
+        console.log("성공");
+      },
+      error: function(request, status, error){
+        console.log("에러");
+      },
+      complete: function(){
+        console.log("완료");
+        //location.replace("/main") //메인페이지로 다시가기
+      },
+    })
+  })
+
+  $(".favorite").click(function(e){ 
+      let feed_id = e.target.attributes.getNamedItem('feed_id').value;
+      let favorite_id = e.target.id;
+      console.log(favorite_id);
+      let favorite_text = $.trim($('#'+favorite_id).html());
+      console.log(favorite_text);     
+      if(favorite_text == 'favorite'){
+        $('#'+favorite_id).html('favorite_border');
+      }
+      else{
+        $('#'+favorite_id).html('favorite');
+      }
+
+      $.ajax({
+        url: "/content/like", // 어떤 url을 호출할건지.
+        data: {
+          feed_id : feed_id,
+          favorite_text : favorite_text,
+        }, //넘기는 데이터는 JSON, 
+        // RestFul형태의 API에서 그냥 데이터만 넘길때는 json형태로 왔다갔다
+        method: "POST", //get호출방법, post로 호출방법 restapi에서는 put delete도 있지만 여기서는 POST만 사용
+  
+        //callback함수: 뭔가 액션이 일어나서 그 결과로 실행된 함수를 callback함수라고 한다.
+        // 직접 실행하지 않아도 뭔가 액션이 일어나서 그 결과로 실행된 함수를 우리가 callback함수라고 한다.
+        // url로 data로 post호출하게 되면 함수 실행
+        success: function(data){
+          console.log("성공");
+        },
+        error: function(request, status, error){
+          console.log("에러");
+        },
+        complete: function(){
+          console.log("완료");
+          //location.replace("/main") //메인페이지로 다시가기
+        },
+      })
+  })
   $('.upload_reply').click(function(e){ // event 정보가 들어감
       console.log(e.target.attributes.getNamedItem('feed_id').value); //타깃의 feed_id정보를 가져온다.
       let feed_id = e.target.attributes.getNamedItem('feed_id').value;
@@ -439,7 +516,7 @@
         success: function(data){
           console.log("성공");
           alert("댓글달기 성공");
-          $("#reply_list_"+feed_id).append("<div class="feed_reply"><span class="feed_txt"> <b> {{ user.nickname }} </b> "+  reply_content +" </span></div>")
+          $("#reply_list_"+feed_id).append("<div class='feed_reply'><span class='feed_txt'> <b> {{ user.nickname }} </b> "+  reply_content +" </span></div>")
           //페이지를 새로고침하지 않아도 될 수 있도록 바로 댓글을 달아줌
 
         },
